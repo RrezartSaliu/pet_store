@@ -1,0 +1,36 @@
+type User {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    budget: Float!
+}
+
+type BuyHistory {
+    id: ID!
+    executionDate: String!
+    successfulBuyCount: Int!
+    unsuccessfulBuyCount: Int!
+}
+
+enum PetType{
+    CAT
+    DOG
+}
+
+type Pet {
+    id: ID!
+    owner: User!
+    name: String!
+    type: PetType!
+    description: String!
+    birthDate: String!
+    price: Float!
+    rating: Int
+}
+
+type Query {
+    users: [User!]!
+    pets: [Pet!]!
+    history_logs: [BuyHistory!]!
+}
