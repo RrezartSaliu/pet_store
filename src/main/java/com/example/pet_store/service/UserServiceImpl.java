@@ -48,6 +48,14 @@ public class UserServiceImpl implements UserService{
         Integer successfulBuyCount = 0;
         Integer unsuccessfulBuyCount = 0;
 
+        BuyingResult result = buyingPets(users, pets, successfulBuyCount, unsuccessfulBuyCount);
+
+        buyHistoryService.create(result.successfulBuyCount, result.unsuccessfulBuyCount);
+        userRepository.saveAll(result.updatedUsers);
+        petService.setOwnersForPets(result.updatedPets());
+    }
+
+    private BuyingResult buyingPets(List<AppUser> users, List<Pet> pets, Integer successfulBuyCount, Integer unsuccessfulBuyCount) {
         for(AppUser user: users){
             boolean userBoughtPet = false;
             for(Pet pet : pets){
@@ -68,11 +76,14 @@ public class UserServiceImpl implements UserService{
             if(userBoughtPet)
                 successfulBuyCount++;
             else unsuccessfulBuyCount++;
-
         }
-
-        buyHistoryService.create(successfulBuyCount, unsuccessfulBuyCount);
-        userRepository.saveAll(users);
-        petService.setOwnersForPets(pets);
+        return new BuyingResult(users, pets, successfulBuyCount, unsuccessfulBuyCount);
     }
+
+    private record BuyingResult(
+            List<AppUser> updatedUsers,
+            List<Pet> updatedPets,
+            Integer successfulBuyCount,
+            Integer unsuccessfulBuyCount
+    ){}
 }

@@ -31,17 +31,11 @@ public class PetServiceImpl implements PetService{
         pet.setName(name);
         pet.setType(petType);
 
-        //random date
-        LocalDate startDate = LocalDate.of(2010,1,1);
-        long start = startDate.toEpochDay();
-        LocalDate endDate = LocalDate.now();
-        long end = endDate.toEpochDay();
-        long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
-        LocalDate birthdate = LocalDate.ofEpochDay(randomEpochDay);
+        LocalDate birthDate = birthDate();
 
-        pet.setBirthDate(birthdate);
+        pet.setBirthDate(birthDate);
 
-        int years = Period.between(birthdate, LocalDate.now()).getYears();
+        int years = Period.between(birthDate, LocalDate.now()).getYears();
 
         if(petType.equals(PetType.DOG)){
             int rating = new Random().nextInt(11);
@@ -59,5 +53,14 @@ public class PetServiceImpl implements PetService{
     @Override
     public List<Pet> setOwnersForPets(List<Pet> pets) {
         return petRepository.saveAll(pets);
+    }
+
+    private LocalDate birthDate(){
+        LocalDate startDate = LocalDate.of(2010,1,1);
+        long start = startDate.toEpochDay();
+        LocalDate endDate = LocalDate.now();
+        long end = endDate.toEpochDay();
+        long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
+        return LocalDate.ofEpochDay(randomEpochDay);
     }
 }

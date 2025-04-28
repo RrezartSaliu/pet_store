@@ -39,7 +39,6 @@ public class PetController {
 
         List<Pet> resultPets = new ArrayList<>();
 
-
         ClassPathResource resource = new ClassPathResource("static/petnames.csv");
         try (CSVReader reader = new CSVReader(new InputStreamReader(resource.getInputStream()))) {
             List<String[]> readDataset = reader.readAll().stream().skip(1).toList();
